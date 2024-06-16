@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Providers } from "@/providers/query-provider";
+import SheetProvider from "@/features/accounts/components/sheet-provider";
+import { Toaster } from "sonner";
+import { config } from "dotenv";
 
+config({ path: ".env.local" });
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -15,8 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <Providers>
+        <SheetProvider />
+        <html lang="en">
+          <body className={inter.className}>{children}</body>
+          <Toaster />
+        </html>
+      </Providers>
+    </ClerkProvider>
   );
 }
